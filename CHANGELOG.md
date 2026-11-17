@@ -16,13 +16,10 @@ moved.
 
 ## Unreleased
 
-Planning only — `PLAN.md`, `COMPARISON.md`, `TODO.csv`, and `agent_run_log.py` copied in
-from the reuse library ahead of v0.3.0.
-
-- Project scaffold: `git init -b master`, package layout, `.gitignore`.
 - `agent_run_log` v1.0.0 adopted from
-  `internal-library/agent_run_log/` (34 tests). The library holds the
-  canonical copy; this repo keeps a copy and matches its version.
+  `internal-library/agent_run_log/` (34 tests), ahead of v0.3.0 where it
+  gets wired into the agent. The library holds the canonical copy; this repo keeps a copy
+  and matches its version.
 
 ## v1.0.0 — Part 6: Off the Leash: Roles, Harnesses and Honest Limits
 
@@ -55,6 +52,24 @@ API key.
 
 ## v0.1.0 — Part 1: A Minimal AI Agent That Edits Your Files
 
-*Planned.* The smallest agent that genuinely works: `read_file`, `edit_file`,
-`create_file`, exact-match editing that must match exactly once, and workspace path
-containment. One provider, around 120 lines.
+*Released 2026-11-18.* The smallest agent that genuinely works.
+
+- `edit.py` — `apply_edit()` replaces an exact span that must match **exactly once**. Zero
+  matches, several matches, an empty anchor and a no-op edit are all refused. No fuzzy
+  matching. Error messages are written for the model to read: that text is the
+  self-correction channel.
+- `workspace.py` — one containment check that `..`, absolute paths and symlinks pointing
+  out all fail together, because `resolve()` runs before the test. Plus read-before-write,
+  a `create_file` that never overwrites, and `read_only=True` for a reviewer that cannot
+  write.
+- `agent.py` — four tools (`list_files`, `read_file`, `edit_file`, `create_file`) on
+  `pydantic-ai`, with every refusal re-raised as `ModelRetry`. The model is a
+  `provider:name` string. **No shell tool**, and a test that asserts so.
+- 84 tests, none of which call a model — `FunctionModel` plays the model's part, so the
+  retry-after-refusal path is tested for free. Verified end to end against
+  `anthropic:claude-haiku-5-5` for about $0.0007.
+- Needs Python 3.10+ (`pydantic-ai` does not support 3.9).
+
+Two findings worth knowing: providers are constructed **eagerly**, so a missing API key
+raises at build time rather than on the first request (pass `defer_model_check=True` to
+build one anyway); and `result.usage` is a property, not a method.
