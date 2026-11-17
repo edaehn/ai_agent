@@ -1,0 +1,21 @@
+[project]
+name = "ai-agent"
+version = "0.1.0"
+description = "A Python AI agent that reads, edits and creates files, built one version per blog post."
+requires-python = ">=3.10"
+dependencies = [
+    "pydantic-ai>=2.69.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["ai_agent"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
