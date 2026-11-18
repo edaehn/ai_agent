@@ -27,11 +27,11 @@ git checkout v0.1.0
 | Part | Tag | Post | The agent gains |
 |---|---|---|---|
 | 1 | `v0.1.0` | A Minimal AI Agent That Edits Your Files | `read_file`, `edit_file`, `create_file`; exact-match edits; path containment |
-| 2 | `v0.2.0` | One Agent, Any Model | Anthropic, OpenAI, Ollama and any OpenAI-compatible endpoint, from config |
-| 3 | `v0.3.0` | Knowing What Your Agent Did (and What It Cost) | Per-action CSV trail, token and cost accounting |
-| 4 | `v0.4.0` | Tests as the Verdict | `run_tests`, accept/revert loop, backups, round cap |
-| 5 | `v0.5.0` | Quality Gates for Prose and Data | `Verifier`/`Gate`: links, schemas, citations |
-| 6 | `v1.0.0` | Off the Leash | Roles, `pydantic-ai-harness`, honest limits |
+| 2 | `v0.2.0` | One Agent, Any Model | The provider becomes a config value — hosted or local |
+| 3 | `v0.3.0` | Knowing What Your Agent Did (and What It Cost) | An audit trail of every action, and what the run cost |
+| 4 | `v0.4.0` | Tests as the Verdict | The agent runs the tests; the loop ends on an exit code |
+| 5 | `v0.5.0` | Quality Gates for Prose and Data | The same idea beyond code: prose and data get their own checks |
+| 6 | `v1.0.0` | Off the Leash | Roles, a production harness, and where I stop |
 
 See [CHANGELOG.md](CHANGELOG.md) for what changed in each version. The reasoning behind
 every decision lives in the posts — that is what they are for.
