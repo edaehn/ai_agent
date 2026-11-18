@@ -95,6 +95,24 @@ class Workspace:
         """The workspace-relative form of a resolved path, for logs and diffs."""
         return str(path.relative_to(self.root))
 
+    def _read_text(self, relpath: str, path: Path) -> str:
+        """Read a file as UTF-8 text, or refuse in words the model can act on.
+
+        A binary file (an image, an archive, a compiled artefact) is not a
+        mistake the model can fix by retrying the same path, but it can choose
+        another file. Without this, ``UnicodeDecodeError`` would escape the tool
+        and end the whole run, which breaks the promise that every refusal is a
+        message the model reads.
+        """
+        try:
+            return path.read_text(encoding="utf-8")
+        except UnicodeDecodeError as exc:
+            raise WorkspaceError(
+                f"{relpath} is not a UTF-8 text file (invalid byte at position "
+                f"{exc.start}), so it cannot be read or edited. This agent works "
+                "only with text files: skip it, or say that it needs a person."
+            ) from exc
+
     # ------------------------------------------------------------------ read --
     def read_file(self, relpath: str) -> str:
         """Return the contents of a file, and remember that it was read.
@@ -106,7 +124,7 @@ class Workspace:
         path = self.resolve(relpath)
         if not path.is_file():
             raise WorkspaceError(f"{relpath} does not exist or is not a file")
-        text = path.read_text(encoding="utf-8")
+        text = self._read_text(relpath, path)
         self._read.add(path)
         return text
 
@@ -150,7 +168,7 @@ class Workspace:
             )
 
         result = apply_edit(
-            path.read_text(encoding="utf-8"),
+            self._read_text(relpath, path),
             old_text,
             new_text,
             path=relpath,
