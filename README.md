@@ -3,9 +3,18 @@
 A Python AI agent that reads, edits and creates files, runs its own checks, and stops when
 a test — not a model — says the work is done.
 
-Companion repo for the **Build Your Own AI Agent** series on
-[daehnhardt.com](https://daehnhardt.com), built one version per post. Sequel to
-[Two AI Agents, One Blog Post](https://daehnhardt.com/blog/2026/07/13/writer-editor-agents/).
+> ### 📖 Start here: [A Minimal AI Agent That Edits Your Files](https://daehnhardt.com/blog/2026/11/19/minimal-ai-agent-that-edits-your-files/)
+>
+> Part 1 of the **[Build Your Own AI Agent](https://daehnhardt.com/series/build-your-own-ai-agent/)**
+> series. It walks through the code at tag `v0.1.0`: why a targeted edit beats a whole-file
+> write, why an anchor must match exactly once, how one check keeps the agent inside a single
+> directory, and why there is no shell tool. The repo is the code; the posts are the reasoning.
+
+Sequel to
+[Two AI Agents, One Blog Post](https://daehnhardt.com/blog/2026/07/13/writer-editor-agents/),
+which built a writer and an editor that passed a draft back and forth. That project could not
+damage anything. Giving an agent write access to files changes the engineering completely —
+not the prompt, everything around it.
 
 ## Which version goes with which post
 
@@ -111,6 +120,14 @@ Two things worth knowing if you are reading the code:
   has read half a repository. Pass `defer_model_check=True` to build one anyway.
 - **`result.usage` is a property, not a method.**
 
-`TODO.csv` tracks the work. Shared pieces live in
-`internal-library` — `agent_run_log.py` is a copy from there, and the
-library holds the canonical version.
+`agent_run_log.py` is maintained in a shared internal library and vendored here, so its
+version is pinned in its own module docstring rather than tracked by this repo's tags.
+
+## Licence and citation
+
+MIT — see [LICENSE](LICENSE). You are free to use this code, including commercially; the
+only condition is that the copyright notice travels with it.
+
+If you reference the project in writing, [CITATION.cff](CITATION.cff) gives the preferred
+form (GitHub turns it into a "Cite this repository" button, with APA and BibTeX). A link
+back to the post a snippet came from is always welcome.

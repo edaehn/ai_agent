@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+title: "ai_agent: a minimal Python AI agent that edits files"
+message: "If you use this software or the accompanying articles, please cite them as below."
+type: software
+authors:
+  - family-names: Daehnhardt
+    given-names: Elena
+    website: "https://daehnhardt.com"
+repository-code: "https://github.com/edaehn/ai_agent"
+url: "https://daehnhardt.com/series/build-your-own-ai-agent/"
+abstract: >-
+  A Python AI agent that reads, edits and creates files, runs its own checks,
+  and stops when a deterministic verdict rather than a model says the work is
+  done. Built one version per post in the "Build Your Own AI Agent" series,
+  with each part tagged so the code in an article can be checked out directly.
+keywords:
+  - ai-agent
+  - python
+  - pydantic-ai
+  - llm-tools
+  - code-editing
+license: MIT
+version: 0.1.0
+date-released: "2026-11-18"

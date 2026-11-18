@@ -16,10 +16,8 @@ moved.
 
 ## Unreleased
 
-- `agent_run_log` v1.0.0 adopted from
-  `internal-library/agent_run_log/` (34 tests), ahead of v0.3.0 where it
-  gets wired into the agent. The library holds the canonical copy; this repo keeps a copy
-  and matches its version.
+- `agent_run_log` v1.0.0 vendored from a shared internal library (34 tests), ahead of
+  v0.3.0 where it gets wired into the agent.
 
 ## v1.0.0 — Part 6: Off the Leash: Roles, Harnesses and Honest Limits
 
