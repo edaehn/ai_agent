@@ -39,6 +39,23 @@ moved.
 
 *Planned.* The provider becomes a config value — hosted or local, with no change to the agent.
 
+## v0.1.1 — Part 1 patch: reproducibility and contract fixes
+
+*Released 2026-11-18.* The code that Part 1 describes, corrected where checking it against
+a clean install showed it was wrong. `v0.1.0` is left as published.
+
+- **Python 3.11 or newer.** `pydantic-ai` does not support 3.10, so `requires-python` is
+  now `>=3.11`. `v0.1.0` said 3.10, which a fresh install on 3.10 cannot satisfy.
+- **Local models need `OLLAMA_BASE_URL`.** Building an `ollama:` agent without it raises
+  `UserError`. The README and the `agent.py` docstrings now say so.
+- **The path error now matches the check.** `Workspace.resolve()` accepts an absolute path
+  that lands inside the root, but its error message told the model "no leading slash". The
+  message now says what is actually forbidden: `..` and anything that leads outside.
+- **Docstrings:** `agent.py` said "three tools"; there are four. `build_agent` now says that
+  `retries` is a per-tool correction budget, not a budget for the whole run.
+- 3 new tests (87 in all): an absolute path inside the root is accepted; the escape
+  message does not ban it; tool retries do not cap a run, only usage limits do.
+
 ## v0.1.0 — Part 1: A Minimal AI Agent That Edits Your Files
 
 *Released 2026-11-18.* The smallest agent that genuinely works.

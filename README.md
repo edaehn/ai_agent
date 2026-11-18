@@ -6,7 +6,7 @@ a test — not a model — says the work is done.
 > ### 📖 Start here: [A Minimal AI Agent That Edits Your Files](https://daehnhardt.com/blog/2026/11/19/minimal-ai-agent-that-edits-your-files/)
 >
 > Part 1 of the **[Build Your Own AI Agent](https://daehnhardt.com/series/build-your-own-ai-agent/)**
-> series. It walks through the code at tag `v0.1.0`: why a targeted edit beats a whole-file
+> series. It walks through the code at tag `v0.1.1`: why a targeted edit beats a whole-file
 > write, why an anchor must match exactly once, how one check keeps the agent inside a single
 > directory, and why there is no shell tool. The repo is the code; the posts are the reasoning.
 
@@ -21,12 +21,12 @@ not the prompt, everything around it.
 Every tag is a working agent. Check one out to get exactly the code its post describes:
 
 ```bash
-git checkout v0.1.0
+git checkout v0.1.1
 ```
 
 | Part | Tag | Post | The agent gains |
 |---|---|---|---|
-| 1 | `v0.1.0` | A Minimal AI Agent That Edits Your Files | `read_file`, `edit_file`, `create_file`; exact-match edits; path containment |
+| 1 | `v0.1.1` | A Minimal AI Agent That Edits Your Files | `read_file`, `edit_file`, `create_file`; exact-match edits; path containment |
 | 2 | `v0.2.0` | One Agent, Any Model | The provider becomes a config value — hosted or local |
 | 3 | `v0.3.0` | Knowing What Your Agent Did (and What It Cost) | An audit trail of every action, and what the run cost |
 | 4 | `v0.4.0` | Tests as the Verdict | The agent runs the tests; the loop ends on an exit code |
@@ -84,7 +84,7 @@ Human review stays mandatory.
 
 ## Install and run
 
-Needs **Python 3.10+** (`pydantic-ai` does not support 3.9; this repo is developed on
+Needs **Python 3.11+** (`pydantic-ai` does not support 3.10; this repo is developed on
 3.13).
 
 ```bash
@@ -96,11 +96,19 @@ uv pip install --python .venv/bin/python -e ".[dev]"
 .venv/bin/python -m ai_agent.agent --root ./sandbox --task "Use math.pi instead of 3.14"
 ```
 
-Pick a different model with `--model`, including a local one that needs no API key:
+Pick a different model with `--model`, including a local one that needs no API key. A local
+model needs a running Ollama server and one environment variable, because `pydantic-ai`
+will not guess the endpoint (without it, building the agent raises a `UserError`):
 
 ```bash
+ollama pull qwen2.5-coder
+ollama serve                      # if Ollama is not already running; in another terminal:
+export OLLAMA_BASE_URL=http://localhost:11434/v1
 .venv/bin/python -m ai_agent.agent --model ollama:qwen2.5-coder --root ./sandbox --task "..."
 ```
+
+Local inference has no per-token charge, but it still uses your own computing resources.
+Whether a particular local model copes with exact-match anchors is a question for Part 2.
 
 Set `PYDANTIC_AI_NO_BANNER=1` to quiet the startup banner.
 
@@ -110,7 +118,7 @@ Set `PYDANTIC_AI_NO_BANNER=1` to quiet the startup banner.
 .venv/bin/python -m pytest tests/ -q
 ```
 
-84 tests, none of which call a model: `FunctionModel` plays the model's part, so the
+87 tests, none of which call a model: `FunctionModel` plays the model's part, so the
 self-correction path — a refused edit coming back as an error the model acts on — is
 tested for free.
 

@@ -8,7 +8,8 @@ as an error the model can act on - is testable for free.
 from __future__ import annotations
 
 import pytest
-from pydantic_ai.exceptions import UnexpectedModelBehavior, UserError
+from pydantic_ai import UsageLimits
+from pydantic_ai.exceptions import UnexpectedModelBehavior, UsageLimitExceeded, UserError
 from pydantic_ai.messages import (
     ModelRequest,
     ModelResponse,
@@ -83,6 +84,26 @@ def test_there_is_no_shell_tool(deps):
         for name in names
         for word in ("shell", "bash", "exec", "run_command", "subprocess")
     )
+
+
+# ----------------------------------------------------------- run budgets ------
+def test_tool_retries_do_not_cap_a_run(deps):
+    """`retries=3` limits correction attempts per tool, not the run as a whole.
+
+    A model that keeps making *successful* tool calls is never retried, so only
+    the usage limits stop it.
+    """
+    calls = 0
+
+    def never_finishes(messages: list[ModelRequest], info: AgentInfo) -> ModelResponse:
+        nonlocal calls
+        calls += 1
+        return ModelResponse(parts=[ToolCallPart("list_files", {})])
+
+    agent = build_agent(FunctionModel(never_finishes), retries=3)
+    with pytest.raises(UsageLimitExceeded):
+        agent.run_sync("go", deps=deps, usage_limits=UsageLimits(request_limit=8))
+    assert calls == 8
 
 
 # ------------------------------------------------------- the happy path ------
