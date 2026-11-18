@@ -21,32 +21,23 @@ moved.
 
 ## v1.0.0 — Part 6: Off the Leash: Roles, Harnesses and Honest Limits
 
-*Planned.* Planner/Coder/Verifier roles and delegation, then `pydantic-ai-harness`
-(`FileSystem`, `Coder`) as the production answer. Deep Agents and the Claude Agent SDK as
-alternatives, CrewAI as a read-only review crew. What not to automate, and measuring the
-gate against deliberately bad outputs.
+*Planned.* Splitting the work across roles, then handing the tools over to a production harness — and an honest account of where I stop.
 
 ## v0.5.0 — Part 5: Quality Gates for Prose and Data, Not Just Code
 
-*Planned.* The `Verifier`/`Gate` protocol: link checking, schema validation, citation
-structure. Deterministic checks block; the model's score advises and never terminates the
-loop. Refine loop with structured failures and no-progress detection.
+*Planned.* The same idea taken beyond code: prose and data get checks of their own.
 
 ## v0.4.0 — Part 4: Tests as the Verdict
 
-*Planned.* `run_tests` instead of a shell, the accept/revert loop, per-file backups, a git
-branch per run, round cap and token budget. The point where the agent becomes independent.
+*Planned.* The agent runs the tests, and the loop ends on an exit code rather than on a model's say-so.
 
 ## v0.3.0 — Part 3: Knowing What Your Agent Did (and What It Cost)
 
-*Planned.* `agent_run_log` wired in: per-action CSV trail, token and cost accounting with
-cache tokens counted separately, per-agent and per-model breakdown.
+*Planned.* An audit trail of every action, and what the run actually cost.
 
 ## v0.2.0 — Part 2: One Agent, Any Model
 
-*Planned.* Provider becomes a config value — `anthropic:`, `openai:`, `ollama:` and
-anything OpenAI-compatible — with `config.py` and `prompts.json`. Local models run with no
-API key.
+*Planned.* The provider becomes a config value — hosted or local, with no change to the agent.
 
 ## v0.1.0 — Part 1: A Minimal AI Agent That Edits Your Files
 
