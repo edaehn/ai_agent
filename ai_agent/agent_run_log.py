@@ -10,7 +10,7 @@ Two pieces that always travel together:
 No dependencies beyond the standard library. Prices are editable data, not code:
 pass your own mapping, because every provider changes them.
 
-Version 1.0.0 - see README.md.
+Version 2.0.0 - see README.md.
 """
 
 from __future__ import annotations
@@ -33,7 +33,7 @@ __all__ = [
     "__version__",
 ]
 
-__version__ = "1.0.0"
+__version__ = "2.0.0"
 
 
 # --------------------------------------------------------------------------- #
@@ -55,6 +55,14 @@ _ALIASES: dict[str, tuple[str, ...]] = {
         "cache_write_tokens",
         "cache_creation_input_tokens",
     ),
+    # A 1-hour-TTL cache write is a SEPARATE number from the 5-minute one and
+    # costs more, so it gets its own field rather than being folded in. Real
+    # Claude Code transcripts show it is ~95% of all cache writes and about a
+    # third of the bill, which is why counting it matters.
+    "cache_write_1h_tokens": (
+        "cache_write_1h_tokens",
+        "ephemeral_1h_input_tokens",
+    ),
 }
 
 
@@ -74,6 +82,7 @@ class Usage:
     output_tokens: int = 0
     cache_read_tokens: int = 0
     cache_write_tokens: int = 0
+    cache_write_1h_tokens: int = 0
 
     def __add__(self, other: "Usage") -> "Usage":
         return Usage(
@@ -81,6 +90,7 @@ class Usage:
             self.output_tokens + other.output_tokens,
             self.cache_read_tokens + other.cache_read_tokens,
             self.cache_write_tokens + other.cache_write_tokens,
+            self.cache_write_1h_tokens + other.cache_write_1h_tokens,
         )
 
     @property
@@ -90,6 +100,7 @@ class Usage:
             + self.output_tokens
             + self.cache_read_tokens
             + self.cache_write_tokens
+            + self.cache_write_1h_tokens
         )
 
     @classmethod
@@ -126,22 +137,24 @@ class Usage:
 class ModelPrice:
     """USD per 1,000,000 tokens for one model.
 
-    Cache rates default to the common industry shape - a read at a tenth of the
-    input rate, a write at 1.25x - so a two-number price still prices a cached
-    run roughly right. Set them explicitly when your provider differs.
+    Cache rates default to the shape current Claude models use: a read at 0.05x
+    the input rate, a 5-minute write at 1.25x, a 1-hour write at 2x. A
+    two-number price therefore still prices a cached run roughly right. Set them
+    explicitly when your provider differs.
     """
 
     input_usd: float
     output_usd: float
     cache_read_usd: Optional[float] = None
     cache_write_usd: Optional[float] = None
+    cache_write_1h_usd: Optional[float] = None
 
     @property
     def read_rate(self) -> float:
         return (
             self.cache_read_usd
             if self.cache_read_usd is not None
-            else self.input_usd * 0.1
+            else self.input_usd * 0.05
         )
 
     @property
@@ -150,6 +163,15 @@ class ModelPrice:
             self.cache_write_usd
             if self.cache_write_usd is not None
             else self.input_usd * 1.25
+        )
+
+    @property
+    def write_1h_rate(self) -> float:
+        """A 1-hour-TTL cache write, which costs more than the 5-minute one."""
+        return (
+            self.cache_write_1h_usd
+            if self.cache_write_1h_usd is not None
+            else self.input_usd * 2.0
         )
 
 
@@ -191,6 +213,7 @@ def estimate_cost(
         usage.input_tokens * price.input_usd
         + usage.cache_read_tokens * price.read_rate
         + usage.cache_write_tokens * price.write_rate
+        + usage.cache_write_1h_tokens * price.write_1h_rate
     ) / 1_000_000
     output_cost = usage.output_tokens * price.output_usd / 1_000_000
     return input_cost, output_cost
@@ -269,10 +292,13 @@ class CostTracker:
             f"  input tokens  : {self.total.input_tokens:>12,}  (${self.input_cost:.4f})",
             f"  output tokens : {self.total.output_tokens:>12,}  (${self.output_cost:.4f})",
         ]
-        if self.total.cache_read_tokens or self.total.cache_write_tokens:
+        if (self.total.cache_read_tokens or self.total.cache_write_tokens
+                or self.total.cache_write_1h_tokens):
+            written = self.total.cache_write_tokens + self.total.cache_write_1h_tokens
             lines.append(
                 f"  cache r/w     : {self.total.cache_read_tokens:>12,} read / "
-                f"{self.total.cache_write_tokens:,} written"
+                f"{written:,} written "
+                f"({self.total.cache_write_1h_tokens:,} at the 1-hour rate)"
             )
         lines.append(f"  TOTAL cost    : ${self.total_cost:.4f}")
 
@@ -307,6 +333,7 @@ class CostTracker:
                     "output_tokens": spend.usage.output_tokens,
                     "cache_read_tokens": spend.usage.cache_read_tokens,
                     "cache_write_tokens": spend.usage.cache_write_tokens,
+                    "cache_write_1h_tokens": spend.usage.cache_write_1h_tokens,
                     "cost_usd": round(spend.cost, 6),
                 }
                 for key, spend in bucket.items()
@@ -319,6 +346,7 @@ class CostTracker:
             "output_tokens": self.total.output_tokens,
             "cache_read_tokens": self.total.cache_read_tokens,
             "cache_write_tokens": self.total.cache_write_tokens,
+            "cache_write_1h_tokens": self.total.cache_write_1h_tokens,
             "input_cost_usd": round(self.input_cost, 6),
             "output_cost_usd": round(self.output_cost, 6),
             "total_cost_usd": round(self.total_cost, 6),
@@ -367,6 +395,7 @@ class CSVLogger:
         "output_tokens",
         "cache_read_tokens",
         "cache_write_tokens",
+        "cache_write_1h_tokens",
         "cost_usd",
         "duration_ms",
         "chars",
@@ -467,6 +496,7 @@ class CSVLogger:
                 "output_tokens": usage.output_tokens,
                 "cache_read_tokens": usage.cache_read_tokens,
                 "cache_write_tokens": usage.cache_write_tokens,
+                "cache_write_1h_tokens": usage.cache_write_1h_tokens,
                 "cost_usd": f"{cost_usd:.6f}",
                 "duration_ms": "" if duration_ms is None else int(duration_ms),
                 "chars": len(content),

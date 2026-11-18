@@ -95,16 +95,20 @@ def test_normalise_pricing_rejects_a_bare_number():
         normalise_pricing({"a": 3.0})
 
 
-def test_cache_rates_default_to_tenth_and_1_25x():
+def test_cache_rates_default_to_current_claude_shape():
+    """Read 0.05x, 5-minute write 1.25x, 1-hour write 2x the input rate."""
     price = ModelPrice(input_usd=4.00, output_usd=20.00)
-    assert price.read_rate == pytest.approx(0.40)
+    assert price.read_rate == pytest.approx(0.20)
     assert price.write_rate == pytest.approx(5.00)
+    assert price.write_1h_rate == pytest.approx(8.00)
 
 
 def test_explicit_cache_rates_win():
-    price = ModelPrice(4.00, 20.00, cache_read_usd=0.20, cache_write_usd=4.40)
+    price = ModelPrice(4.00, 20.00, cache_read_usd=0.20, cache_write_usd=4.40,
+                       cache_write_1h_usd=7.00)
     assert price.read_rate == pytest.approx(0.20)
     assert price.write_rate == pytest.approx(4.40)
+    assert price.write_1h_rate == pytest.approx(7.00)
 
 
 def test_estimate_cost_prices_the_four_counts_separately():
@@ -123,7 +127,7 @@ def test_cache_reads_are_much_cheaper_than_fresh_input():
     cached = estimate_cost(
         "claude-opus-5-5", Usage(cache_read_tokens=1_000_000), pricing
     )
-    assert cached[0] == pytest.approx(fresh[0] * 0.1)
+    assert cached[0] == pytest.approx(fresh[0] * 0.05)
 
 
 def test_unpriced_model_costs_nothing():
@@ -332,3 +336,68 @@ def test_close_is_idempotent(tmp_path):
     logger = CSVLogger(tmp_path / "run.csv", "r1")
     logger.close()
     logger.close()
+
+
+# --------------------------------------------------------------------------- #
+# 1-hour TTL cache writes (added in 2.0.0)
+# --------------------------------------------------------------------------- #
+def test_from_obj_reads_the_1h_cache_write_field():
+    """The shape a real Claude Code transcript uses."""
+    u = Usage.from_obj(
+        {
+            "input_tokens": 2,
+            "output_tokens": 322,
+            "cache_read_input_tokens": 43045,
+            "ephemeral_1h_input_tokens": 27441,
+        }
+    )
+    assert u == Usage(2, 322, 43045, 0, 27441)
+
+
+def test_a_1h_write_is_priced_higher_than_a_5m_write():
+    pricing = normalise_pricing({"m": (2.00, 10.00)})
+    five_min = estimate_cost("m", Usage(cache_write_tokens=1_000_000), pricing)[0]
+    one_hour = estimate_cost("m", Usage(cache_write_1h_tokens=1_000_000), pricing)[0]
+    assert five_min == pytest.approx(2.50)
+    assert one_hour == pytest.approx(4.00)
+    assert one_hour > five_min
+
+
+def test_ignoring_1h_writes_would_badly_understate_the_bill():
+    """Why this field exists: on real traffic it dominates the cache writes.
+
+    Numbers taken from one message in an actual transcript.
+    """
+    pricing = normalise_pricing({"claude-sonnet-5": (2.00, 10.00)})
+    real = Usage(2, 322, 43045, 0, 27441)
+    without = Usage(2, 322, 43045, 0, 0)
+    counted = sum(estimate_cost("claude-sonnet-5", real, pricing))
+    missed = sum(estimate_cost("claude-sonnet-5", without, pricing))
+    assert counted > missed * 10
+
+
+def test_1h_writes_count_towards_total_tokens():
+    assert Usage(1, 2, 3, 4, 5).total_tokens == 15
+
+
+def test_the_csv_records_1h_writes_separately(tmp_path):
+    log = tmp_path / "run.csv"
+    with CSVLogger(log, "r1") as logger:
+        logger.log(agent="a", action="x", usage=Usage(1, 2, 3, 4, 5))
+    row = _rows(log)[0]
+    assert row["cache_write_tokens"] == "4"
+    assert row["cache_write_1h_tokens"] == "5"
+
+
+def test_the_summary_names_the_1h_share(tmp_path):
+    t = CostTracker({"m": (2.0, 10.0)})
+    t.add("m", Usage(1, 2, 3, 4, 5))
+    assert "1-hour rate" in t.summary()
+
+
+def test_to_dict_carries_the_1h_field():
+    t = CostTracker({"m": (2.0, 10.0)})
+    t.add("m", Usage(1, 2, 3, 4, 5), agent="coder")
+    d = t.to_dict("r")
+    assert d["cache_write_1h_tokens"] == 5
+    assert d["by_agent"]["coder"]["cache_write_1h_tokens"] == 5
