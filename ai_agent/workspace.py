@@ -74,6 +74,11 @@ class Workspace:
         ``resolve()`` is called before the containment test, not after, so a
         symlink inside the root that points outside it resolves to its real
         destination and is rejected like any other outside path.
+
+        The check is about where a path lands, not how it is spelled, so an
+        absolute path that already points inside the root is accepted. The
+        model is still told to use relative paths, because that is what
+        ``list_files`` returns.
         """
         candidate = (self.root / Path(relpath)).expanduser()
         resolved = candidate.resolve()
@@ -81,7 +86,8 @@ class Workspace:
             raise PathEscape(
                 f"{relpath!r} resolves to {resolved}, which is outside the "
                 f"workspace {self.root}. Use a path relative to the workspace "
-                "root, with no leading slash and no '..'."
+                "root, such as 'src/app.py'. Do not use '..' or a symlink that "
+                "leads outside it."
             )
         return resolved
 

@@ -1,8 +1,8 @@
 [project]
 name = "ai-agent"
-version = "0.1.0"
+version = "0.1.1"
 description = "A Python AI agent that reads, edits and creates files, built one version per blog post."
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "pydantic-ai>=2.69.0",
 ]

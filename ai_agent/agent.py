@@ -1,6 +1,6 @@
-"""The agent: three tools, one workspace, any model.
+"""The agent: four tools, one workspace, any model.
 
-The whole file-editing agent is the three tools below plus the instructions that
+The whole file-editing agent is the four tools below plus the instructions that
 tell the model how to use them. There is no loop here - ``pydantic_ai`` runs it,
 calling tools until the model stops asking - which is the point: the interesting
 decisions are all in the tool contract, not in loop plumbing.
@@ -14,6 +14,12 @@ Run it:
 
     python -m ai_agent.agent --root ./sandbox --task "Add a docstring to parse()"
     python -m ai_agent.agent --model ollama:qwen2.5-coder --root ./sandbox --task "..."
+
+A local ``ollama:`` model needs a running Ollama server and one environment
+variable first, because ``pydantic_ai`` will not guess the endpoint:
+
+    ollama serve                      # if it is not already running
+    export OLLAMA_BASE_URL=http://localhost:11434/v1
 """
 
 from __future__ import annotations
@@ -76,7 +82,7 @@ def build_agent(
 
         anthropic:claude-opus-5-5
         openai:gpt-6.1-sol
-        ollama:qwen2.5-coder          (local, no API key)
+        ollama:qwen2.5-coder          (local, no API key, needs OLLAMA_BASE_URL)
 
     Note how little the agent knows about any of that. The July writer-editor
     project needed an abstract backend class and three implementations to support
@@ -92,6 +98,12 @@ def build_agent(
     ``retries`` is per tool, and it is the budget for self-correction: each
     refused edit costs one. Three is enough for "anchor matched twice, add
     context" to be recoverable while still stopping a model that is flailing.
+
+    It is not a budget for the whole run. Successful tool calls are not
+    retries, so a model that keeps calling tools successfully is bounded only
+    by the usage limits passed to ``run_sync``. ``pydantic_ai`` applies a default
+    request limit; a token or cost limit is something you add with
+    ``UsageLimits`` (see ``tests/test_agent.py``).
     """
     agent: Agent[Deps, str] = Agent(
         model,

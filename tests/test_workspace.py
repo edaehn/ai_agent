@@ -70,6 +70,18 @@ def test_the_error_says_how_to_write_the_path(ws):
     assert "relative to the workspace root" in str(exc.value)
 
 
+def test_an_absolute_path_inside_the_root_is_accepted(ws):
+    """Containment is about where a path lands, not how it is spelled."""
+    assert ws.read_file(str(ws.root / "main.py")) == "x = 1\n"
+
+
+def test_the_escape_message_does_not_ban_what_the_check_allows(ws):
+    """The error text and the check must agree about absolute paths."""
+    with pytest.raises(PathEscape) as exc:
+        ws.read_file("../x")
+    assert "leading slash" not in str(exc.value)
+
+
 def test_a_normal_nested_path_works(ws):
     assert ws.read_file("pkg/util.py") == "y = 2\n"
 
