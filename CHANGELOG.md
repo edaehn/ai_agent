@@ -48,6 +48,19 @@ cache tokens counted separately, per-agent and per-model breakdown.
 anything OpenAI-compatible — with `config.py` and `prompts.json`. Local models run with no
 API key.
 
+## v0.1.2 — Part 1 patch: a binary file no longer ends the run
+
+*Released 2026-11-18.* `v0.1.1` is left as published.
+
+- **Non-text files are refused, not fatal.** Reading a file that is not valid UTF-8 (an
+  image, an archive) raised `UnicodeDecodeError`, which is not a `WorkspaceError`, so it
+  escaped the tool as a crash instead of coming back to the model as a `ModelRetry`. It is
+  now a refusal that names the file and says the agent works only with text. The same guard
+  covers a file that turns binary between the read and the edit.
+- 3 new tests (90 in all): a binary read is refused and does not unlock editing; a file that
+  turns binary after reading is refused on edit; and, end to end, the model is shown the
+  refusal and the run carries on.
+
 ## v0.1.1 — Part 1 patch: reproducibility and contract fixes
 
 *Released 2026-11-18.* The code that Part 1 describes, corrected where checking it against

@@ -86,6 +86,29 @@ def test_there_is_no_shell_tool(deps):
     )
 
 
+# ------------------------------------------------------- binary files -------
+def test_reading_a_binary_file_lets_the_model_recover(deps):
+    """The refusal reaches the model as a retry, and the run carries on."""
+    (deps.workspace.root / "logo.png").write_bytes(b"\x89PNG\r\n\x1a\n\xff\xfe\x00")
+    seen: list[str] = []
+    calls = iter([ToolCallPart("read_file", {"path": "logo.png"})])
+
+    def script(messages: list[ModelRequest], info: AgentInfo) -> ModelResponse:
+        for message in messages:
+            for part in message.parts:
+                content = getattr(part, "content", None)
+                if isinstance(content, str) and "not a UTF-8 text file" in content:
+                    seen.append(content)
+        try:
+            return ModelResponse(parts=[next(calls)])
+        except StopIteration:
+            return ModelResponse(parts=[TextPart("That file is binary, so I skipped it.")])
+
+    result = build_agent(FunctionModel(script)).run_sync("read logo.png", deps=deps)
+    assert seen  # the model was shown the refusal
+    assert "skipped" in result.output
+
+
 # ----------------------------------------------------------- run budgets ------
 def test_tool_retries_do_not_cap_a_run(deps):
     """`retries=3` limits correction attempts per tool, not the run as a whole.

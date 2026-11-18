@@ -158,6 +158,25 @@ def test_editing_a_missing_file_is_refused(ws):
 
 
 # ------------------------------------------------------------- read-only -----
+def test_a_binary_file_is_refused_not_a_crash(ws):
+    """A non-UTF-8 file must come back as a refusal the model can read."""
+    (ws.root / "logo.png").write_bytes(b"\x89PNG\r\n\x1a\n\xff\xfe\x00")
+    with pytest.raises(WorkspaceError) as exc:
+        ws.read_file("logo.png")
+    message = str(exc.value)
+    assert "not a UTF-8 text file" in message
+    assert "logo.png" in message
+    assert ws.read_paths == set()  # a refused read does not unlock editing
+
+
+def test_a_file_that_turns_binary_after_reading_is_refused(ws):
+    ws.read_file("main.py")
+    (ws.root / "main.py").write_bytes(b"\xff\xfe\x00 not text")
+    with pytest.raises(WorkspaceError) as exc:
+        ws.edit_file("main.py", "x = 1", "x = 2")
+    assert "not a UTF-8 text file" in str(exc.value)
+
+
 def test_a_read_only_workspace_can_read(ws):
     reviewer = Workspace(ws.root, read_only=True)
     assert reviewer.read_file("main.py") == "x = 1\n"

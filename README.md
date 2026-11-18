@@ -6,7 +6,7 @@ a test — not a model — says the work is done.
 > ### 📖 Start here: [A Minimal AI Agent That Edits Your Files](https://daehnhardt.com/blog/2026/11/19/minimal-ai-agent-that-edits-your-files/)
 >
 > Part 1 of the **[Build Your Own AI Agent](https://daehnhardt.com/series/build-your-own-ai-agent/)**
-> series. It walks through the code at tag `v0.1.1`: why a targeted edit beats a whole-file
+> series. It walks through the code at tag `v0.1.2`: why a targeted edit beats a whole-file
 > write, why an anchor must match exactly once, how one check keeps the agent inside a single
 > directory, and why there is no shell tool. The repo is the code; the posts are the reasoning.
 
@@ -21,12 +21,12 @@ not the prompt, everything around it.
 Every tag is a working agent. Check one out to get exactly the code its post describes:
 
 ```bash
-git checkout v0.1.1
+git checkout v0.1.2
 ```
 
 | Part | Tag | Post | The agent gains |
 |---|---|---|---|
-| 1 | `v0.1.1` | A Minimal AI Agent That Edits Your Files | `read_file`, `edit_file`, `create_file`; exact-match edits; path containment |
+| 1 | `v0.1.2` | A Minimal AI Agent That Edits Your Files | `read_file`, `edit_file`, `create_file`; exact-match edits; path containment |
 | 2 | `v0.2.0` | One Agent, Any Model | Anthropic, OpenAI, Ollama and any OpenAI-compatible endpoint, from config |
 | 3 | `v0.3.0` | Knowing What Your Agent Did (and What It Cost) | Per-action CSV trail, token and cost accounting |
 | 4 | `v0.4.0` | Tests as the Verdict | `run_tests`, accept/revert loop, backups, round cap |
@@ -118,7 +118,7 @@ Set `PYDANTIC_AI_NO_BANNER=1` to quiet the startup banner.
 .venv/bin/python -m pytest tests/ -q
 ```
 
-87 tests, none of which call a model: `FunctionModel` plays the model's part, so the
+90 tests, none of which call a model: `FunctionModel` plays the model's part, so the
 self-correction path — a refused edit coming back as an error the model acts on — is
 tested for free.
 
