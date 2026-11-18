@@ -6,4 +6,9 @@ __pycache__/
 .env
 runs/
 *.csv
-!TODO.csv
+
+# Local planning documents: internal paths, and they spoil unpublished parts.
+# Kept on disk, never committed.
+PLAN.md
+COMPARISON.md
+TODO.csv

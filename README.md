@@ -33,7 +33,8 @@ git checkout v0.1.0
 | 5 | `v0.5.0` | Quality Gates for Prose and Data | `Verifier`/`Gate`: links, schemas, citations |
 | 6 | `v1.0.0` | Off the Leash | Roles, `pydantic-ai-harness`, honest limits |
 
-See `CHANGELOG.md` for what changed in each, and `PLAN.md` for the design reasoning.
+See [CHANGELOG.md](CHANGELOG.md) for what changed in each version. The reasoning behind
+every decision lives in the posts — that is what they are for.
 
 ## Any model, including local ones
 
