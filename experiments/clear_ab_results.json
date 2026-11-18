@@ -1,0 +1,150 @@
+{
+  "model": "anthropic:claude-haiku-5-5",
+  "phases": 4,
+  "summary": {
+    "A": {
+      "trials": 4,
+      "median_tokens": 25901,
+      "median_cost": 0.00309,
+      "median_seconds": 10.1,
+      "median_input": 24647,
+      "median_output": 1244,
+      "median_cache_read": 0,
+      "completeness": [
+        33,
+        33,
+        33,
+        33
+      ]
+    },
+    "B": {
+      "trials": 4,
+      "median_tokens": 20521,
+      "median_cost": 0.00264,
+      "median_seconds": 12.0,
+      "median_input": 19044,
+      "median_output": 1480,
+      "median_cache_read": 0,
+      "completeness": [
+        33,
+        33,
+        33,
+        33
+      ]
+    }
+  },
+  "runs": [
+    {
+      "condition": "A",
+      "trial": 1,
+      "seconds": 11.69,
+      "cost_usd": 0.003097,
+      "completeness": 33,
+      "total_tokens": 25949,
+      "per_phase_tokens": [
+        4179,
+        5753,
+        7223,
+        8794
+      ]
+    },
+    {
+      "condition": "B",
+      "trial": 1,
+      "seconds": 11.9,
+      "cost_usd": 0.00262,
+      "completeness": 33,
+      "total_tokens": 20453,
+      "per_phase_tokens": [
+        4171,
+        5632,
+        5701,
+        4949
+      ]
+    },
+    {
+      "condition": "A",
+      "trial": 2,
+      "seconds": 10.07,
+      "cost_usd": 0.003109,
+      "completeness": 33,
+      "total_tokens": 25958,
+      "per_phase_tokens": [
+        4179,
+        5712,
+        7202,
+        8865
+      ]
+    },
+    {
+      "condition": "B",
+      "trial": 2,
+      "seconds": 11.88,
+      "cost_usd": 0.002625,
+      "completeness": 33,
+      "total_tokens": 20457,
+      "per_phase_tokens": [
+        4175,
+        5637,
+        5722,
+        4923
+      ]
+    },
+    {
+      "condition": "A",
+      "trial": 3,
+      "seconds": 9.89,
+      "cost_usd": 0.003079,
+      "completeness": 33,
+      "total_tokens": 25854,
+      "per_phase_tokens": [
+        4167,
+        5740,
+        7194,
+        8753
+      ]
+    },
+    {
+      "condition": "B",
+      "trial": 3,
+      "seconds": 12.07,
+      "cost_usd": 0.002666,
+      "completeness": 33,
+      "total_tokens": 20591,
+      "per_phase_tokens": [
+        4175,
+        5637,
+        5713,
+        5066
+      ]
+    },
+    {
+      "condition": "A",
+      "trial": 4,
+      "seconds": 10.12,
+      "cost_usd": 0.003067,
+      "completeness": 33,
+      "total_tokens": 25758,
+      "per_phase_tokens": [
+        4174,
+        5688,
+        7163,
+        8733
+      ]
+    },
+    {
+      "condition": "B",
+      "trial": 4,
+      "seconds": 12.32,
+      "cost_usd": 0.002663,
+      "completeness": 33,
+      "total_tokens": 20585,
+      "per_phase_tokens": [
+        4165,
+        5634,
+        5712,
+        5074
+      ]
+    }
+  ]
+}
