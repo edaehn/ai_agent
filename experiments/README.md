@@ -40,8 +40,28 @@ A grows **+1,537 tokens per phase**; B grows **+277**. Phase 1 is a tie, as it m
 both start cold. By phase 4, A costs 76% more for the same work.
 
 The surprise is phase 4. That is the phase needing knowledge of the other three, so it
-was where clearing should have been punished. Instead it was B's *cheapest* phase:
-reading the finished file is far cheaper than carrying the conversation that produced it.
+was where clearing should have been punished. It was the cheapest of B's last three
+phases. Phase 1 was lower still. Reading the finished file is far cheaper than carrying
+the conversation that produced it.
+
+### The 18 November file and the API key
+
+`clear_ab.py` stops before the first Haiku call unless the process already has
+`ANTHROPIC_API_KEY`. A Claude Desktop login does not provide that variable, and it does
+not turn on prompt caching.
+
+A terminal on this machine inherits the key from the shell setup, so a run started
+there would have it without anyone pasting it into the chat. Claude Desktop's code
+sandbox does not load that shell setup. The 18 November JSON matches the format this
+script writes, including costs rounded to six decimals, so the file alone cannot show
+which happened: a terminal that already had the key, or Claude writing the JSON without
+a live call.
+
+`clear_ab_results_2026-11-21.json` is a live run from a shell that had the key. Medians
+were 25,876 and 20,578 tokens, 20.5% fewer for the fresh conversation, with cache reads
+at 0 and a score of 33 on every trial. One continuous trial reached 30,301 tokens. The
+extra tokens in A are the prefix Claude Code would count as cache reads. This harness
+sends that prefix as fresh input, which is why the cache-read field stays zero.
 
 ### Two honest limits
 
