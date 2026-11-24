@@ -1,0 +1,682 @@
+{
+  "model": "anthropic:claude-haiku-5-5",
+  "date": "2026-11-24",
+  "phases": 4,
+  "complete": true,
+  "seed": 20261124,
+  "condition_order_per_trial": [
+    [
+      "B",
+      "C",
+      "A"
+    ],
+    [
+      "B",
+      "C",
+      "A"
+    ],
+    [
+      "A",
+      "B",
+      "C"
+    ],
+    [
+      "C",
+      "A",
+      "B"
+    ],
+    [
+      "A",
+      "C",
+      "B"
+    ],
+    [
+      "B",
+      "A",
+      "C"
+    ]
+  ],
+  "environment": {
+    "python": "3.13.5",
+    "pydantic_ai": "2.69.0",
+    "ai_agent_commit": "8057ae8"
+  },
+  "retried_runs": [],
+  "summary": {
+    "A": {
+      "trials": 6,
+      "median_tokens": 25724,
+      "median_cost": 0.00307,
+      "median_seconds": 9.1,
+      "median_input": 24481,
+      "median_output": 1262,
+      "median_cache_read": 0,
+      "completeness": [
+        33,
+        33,
+        33,
+        33,
+        33,
+        33
+      ],
+      "functions_correct": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "median_per_phase_tokens": [
+        4173,
+        5679,
+        7133,
+        8742
+      ]
+    },
+    "B": {
+      "trials": 6,
+      "median_tokens": 19936,
+      "median_cost": 0.00258,
+      "median_seconds": 11.0,
+      "median_input": 18464,
+      "median_output": 1506,
+      "median_cache_read": 0,
+      "completeness": [
+        33,
+        33,
+        33,
+        33,
+        33,
+        33
+      ],
+      "functions_correct": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "median_per_phase_tokens": [
+        4173,
+        4490,
+        5710,
+        5058
+      ]
+    },
+    "C": {
+      "trials": 6,
+      "median_tokens": 19445,
+      "median_cost": 0.00255,
+      "median_seconds": 10.9,
+      "median_input": 17927,
+      "median_output": 1517,
+      "median_cache_read": 0,
+      "completeness": [
+        33,
+        33,
+        33,
+        33,
+        33,
+        33
+      ],
+      "functions_correct": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "median_per_phase_tokens": [
+        4168,
+        4487,
+        5708,
+        5061
+      ]
+    }
+  },
+  "runs": [
+    {
+      "condition": "B",
+      "trial": 1,
+      "run_position": 1,
+      "seconds": 11.6,
+      "cost_usd": 0.00261,
+      "completeness": 33,
+      "functions_correct": 3,
+      "total_tokens": 20421,
+      "input_tokens": 19000,
+      "output_tokens": 1421,
+      "per_phase_tokens": [
+        4167,
+        5630,
+        5708,
+        4916
+      ],
+      "per_phase_input_tokens": [
+        3896,
+        5296,
+        5368,
+        4440
+      ],
+      "per_phase_output_tokens": [
+        271,
+        334,
+        340,
+        476
+      ]
+    },
+    {
+      "condition": "C",
+      "trial": 1,
+      "run_position": 2,
+      "seconds": 11.61,
+      "cost_usd": 0.002822,
+      "completeness": 33,
+      "functions_correct": 3,
+      "total_tokens": 21980,
+      "input_tokens": 20419,
+      "output_tokens": 1561,
+      "per_phase_tokens": [
+        5582,
+        5630,
+        5709,
+        5059
+      ],
+      "per_phase_input_tokens": [
+        5247,
+        5296,
+        5366,
+        4510
+      ],
+      "per_phase_output_tokens": [
+        335,
+        334,
+        343,
+        549
+      ]
+    },
+    {
+      "condition": "A",
+      "trial": 1,
+      "run_position": 3,
+      "seconds": 10.23,
+      "cost_usd": 0.003052,
+      "completeness": 33,
+      "functions_correct": 3,
+      "total_tokens": 25664,
+      "input_tokens": 24450,
+      "output_tokens": 1214,
+      "per_phase_tokens": [
+        4173,
+        5679,
+        7128,
+        8684
+      ],
+      "per_phase_input_tokens": [
+        3896,
+        5367,
+        6850,
+        8337
+      ],
+      "per_phase_output_tokens": [
+        277,
+        312,
+        278,
+        347
+      ]
+    },
+    {
+      "condition": "B",
+      "trial": 2,
+      "run_position": 1,
+      "seconds": 10.68,
+      "cost_usd": 0.002537,
+      "completeness": 33,
+      "functions_correct": 3,
+      "total_tokens": 19408,
+      "input_tokens": 17917,
+      "output_tokens": 1491,
+      "per_phase_tokens": [
+        4165,
+        4482,
+        5714,
+        5047
+      ],
+      "per_phase_input_tokens": [
+        3896,
+        4154,
+        5368,
+        4499
+      ],
+      "per_phase_output_tokens": [
+        269,
+        328,
+        346,
+        548
+      ]
+    },
+    {
+      "condition": "C",
+      "trial": 2,
+      "run_position": 2,
+      "seconds": 10.92,
+      "cost_usd": 0.002557,
+      "completeness": 33,
+      "functions_correct": 3,
+      "total_tokens": 19456,
+      "input_tokens": 17928,
+      "output_tokens": 1528,
+      "per_phase_tokens": [
+        4175,
+        4485,
+        5727,
+        5069
+      ],
+      "per_phase_input_tokens": [
+        3896,
+        4154,
+        5368,
+        4510
+      ],
+      "per_phase_output_tokens": [
+        279,
+        331,
+        359,
+        559
+      ]
+    },
+    {
+      "condition": "A",
+      "trial": 2,
+      "run_position": 3,
+      "seconds": 10.76,
+      "cost_usd": 0.003368,
+      "completeness": 33,
+      "functions_correct": 3,
+      "total_tokens": 28295,
+      "input_tokens": 26948,
+      "output_tokens": 1347,
+      "per_phase_tokens": [
+        5585,
+        6051,
+        7544,
+        9115
+      ],
+      "per_phase_input_tokens": [
+        5247,
+        5674,
+        7258,
+        8769
+      ],
+      "per_phase_output_tokens": [
+        338,
+        377,
+        286,
+        346
+      ]
+    },
+    {
+      "condition": "A",
+      "trial": 3,
+      "run_position": 1,
+      "seconds": 9.1,
+      "cost_usd": 0.003105,
+      "completeness": 33,
+      "functions_correct": 3,
+      "total_tokens": 25938,
+      "input_tokens": 24659,
+      "output_tokens": 1279,
+      "per_phase_tokens": [
+        4173,
+        5723,
+        7196,
+        8846
+      ],
+      "per_phase_input_tokens": [
+        3896,
+        5391,
+        6910,
+        8462
+      ],
+      "per_phase_output_tokens": [
+        277,
+        332,
+        286,
+        384
+      ]
+    },
+    {
+      "condition": "B",
+      "trial": 3,
+      "run_position": 2,
+      "seconds": 10.42,
+      "cost_usd": 0.002506,
+      "completeness": 33,
+      "functions_correct": 3,
+      "total_tokens": 19300,
+      "input_tokens": 17859,
+      "output_tokens": 1441,
+      "per_phase_tokens": [
+        4173,
+        4490,
+        5712,
+        4925
+      ],
+      "per_phase_input_tokens": [
+        3896,
+        4154,
+        5368,
+        4441
+      ],
+      "per_phase_output_tokens": [
+        277,
+        336,
+        344,
+        484
+      ]
+    },
+    {
+      "condition": "C",
+      "trial": 3,
+      "run_position": 3,
+      "seconds": 10.98,
+      "cost_usd": 0.002528,
+      "completeness": 33,
+      "functions_correct": 3,
+      "total_tokens": 19384,
+      "input_tokens": 17910,
+      "output_tokens": 1474,
+      "per_phase_tokens": [
+        4166,
+        4483,
+        5708,
+        5027
+      ],
+      "per_phase_input_tokens": [
+        3896,
+        4154,
+        5368,
+        4492
+      ],
+      "per_phase_output_tokens": [
+        270,
+        329,
+        340,
+        535
+      ]
+    },
+    {
+      "condition": "C",
+      "trial": 4,
+      "run_position": 1,
+      "seconds": 11.45,
+      "cost_usd": 0.002697,
+      "completeness": 33,
+      "functions_correct": 3,
+      "total_tokens": 20863,
+      "input_tokens": 19337,
+      "output_tokens": 1526,
+      "per_phase_tokens": [
+        4169,
+        5928,
+        5702,
+        5064
+      ],
+      "per_phase_input_tokens": [
+        3896,
+        5563,
+        5368,
+        4510
+      ],
+      "per_phase_output_tokens": [
+        273,
+        365,
+        334,
+        554
+      ]
+    },
+    {
+      "condition": "A",
+      "trial": 4,
+      "run_position": 2,
+      "seconds": 8.39,
+      "cost_usd": 0.002995,
+      "completeness": 33,
+      "functions_correct": 3,
+      "total_tokens": 25264,
+      "input_tokens": 24092,
+      "output_tokens": 1172,
+      "per_phase_tokens": [
+        4171,
+        5535,
+        6996,
+        8562
+      ],
+      "per_phase_input_tokens": [
+        3896,
+        5267,
+        6712,
+        8217
+      ],
+      "per_phase_output_tokens": [
+        275,
+        268,
+        284,
+        345
+      ]
+    },
+    {
+      "condition": "B",
+      "trial": 4,
+      "run_position": 3,
+      "seconds": 11.04,
+      "cost_usd": 0.002554,
+      "completeness": 33,
+      "functions_correct": 3,
+      "total_tokens": 19451,
+      "input_tokens": 17929,
+      "output_tokens": 1522,
+      "per_phase_tokens": [
+        4174,
+        4491,
+        5709,
+        5077
+      ],
+      "per_phase_input_tokens": [
+        3896,
+        4154,
+        5366,
+        4513
+      ],
+      "per_phase_output_tokens": [
+        278,
+        337,
+        343,
+        564
+      ]
+    },
+    {
+      "condition": "A",
+      "trial": 5,
+      "run_position": 1,
+      "seconds": 9.03,
+      "cost_usd": 0.003087,
+      "completeness": 33,
+      "functions_correct": 3,
+      "total_tokens": 25785,
+      "input_tokens": 24513,
+      "output_tokens": 1272,
+      "per_phase_tokens": [
+        4168,
+        5679,
+        7138,
+        8800
+      ],
+      "per_phase_input_tokens": [
+        3896,
+        5360,
+        6856,
+        8401
+      ],
+      "per_phase_output_tokens": [
+        272,
+        319,
+        282,
+        399
+      ]
+    },
+    {
+      "condition": "C",
+      "trial": 5,
+      "run_position": 2,
+      "seconds": 10.33,
+      "cost_usd": 0.002547,
+      "completeness": 33,
+      "functions_correct": 3,
+      "total_tokens": 19434,
+      "input_tokens": 17926,
+      "output_tokens": 1508,
+      "per_phase_tokens": [
+        4168,
+        4490,
+        5708,
+        5068
+      ],
+      "per_phase_input_tokens": [
+        3896,
+        4154,
+        5368,
+        4508
+      ],
+      "per_phase_output_tokens": [
+        272,
+        336,
+        340,
+        560
+      ]
+    },
+    {
+      "condition": "B",
+      "trial": 5,
+      "run_position": 3,
+      "seconds": 10.95,
+      "cost_usd": 0.002831,
+      "completeness": 33,
+      "functions_correct": 3,
+      "total_tokens": 22002,
+      "input_tokens": 20426,
+      "output_tokens": 1576,
+      "per_phase_tokens": [
+        5576,
+        5634,
+        5705,
+        5087
+      ],
+      "per_phase_input_tokens": [
+        5247,
+        5296,
+        5368,
+        4515
+      ],
+      "per_phase_output_tokens": [
+        329,
+        338,
+        337,
+        572
+      ]
+    },
+    {
+      "condition": "B",
+      "trial": 6,
+      "run_position": 1,
+      "seconds": 11.01,
+      "cost_usd": 0.002719,
+      "completeness": 33,
+      "functions_correct": 3,
+      "total_tokens": 20861,
+      "input_tokens": 19279,
+      "output_tokens": 1582,
+      "per_phase_tokens": [
+        5586,
+        4490,
+        5715,
+        5070
+      ],
+      "per_phase_input_tokens": [
+        5247,
+        4154,
+        5368,
+        4510
+      ],
+      "per_phase_output_tokens": [
+        339,
+        336,
+        347,
+        560
+      ]
+    },
+    {
+      "condition": "A",
+      "trial": 6,
+      "run_position": 2,
+      "seconds": 9.05,
+      "cost_usd": 0.002799,
+      "completeness": 33,
+      "functions_correct": 3,
+      "total_tokens": 22987,
+      "input_tokens": 21735,
+      "output_tokens": 1252,
+      "per_phase_tokens": [
+        5584,
+        4088,
+        4839,
+        8476
+      ],
+      "per_phase_input_tokens": [
+        5247,
+        3727,
+        4607,
+        8154
+      ],
+      "per_phase_output_tokens": [
+        337,
+        361,
+        232,
+        322
+      ]
+    },
+    {
+      "condition": "C",
+      "trial": 6,
+      "run_position": 3,
+      "seconds": 9.97,
+      "cost_usd": 0.002518,
+      "completeness": 33,
+      "functions_correct": 3,
+      "total_tokens": 19340,
+      "input_tokens": 17881,
+      "output_tokens": 1459,
+      "per_phase_tokens": [
+        4165,
+        4484,
+        5725,
+        4966
+      ],
+      "per_phase_input_tokens": [
+        3896,
+        4154,
+        5368,
+        4463
+      ],
+      "per_phase_output_tokens": [
+        269,
+        330,
+        357,
+        503
+      ]
+    }
+  ]
+}
